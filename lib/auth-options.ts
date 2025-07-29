@@ -1,50 +1,47 @@
-// lib/auth-options.ts
 import GoogleProvider from "next-auth/providers/google";
-import { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDB } from "./mongoDB";
 import { User } from "@/models/user";
+import bcrypt from "bcryptjs";
 
-export const authOptions: AuthOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        await connectDB();
+        const user = await User.findOne({ email: credentials.email });
+
+        if (!user || !user.password) throw new Error("No user found");
+        const isMatch = await bcrypt.compare(credentials.password, user.password);
+        if (!isMatch) throw new Error("Incorrect password");
+
+        return { id: user._id, name: user.name, email: user.email };
+      },
     }),
   ],
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    async signIn({ user }) {
-      await connectDB();
-
-      const existingUser = await User.findOne({ email: user.email });
-      if (!existingUser) {
-        await User.create({
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        });
-      }
-
-      return true;
-    },
-
     async jwt({ token, user }) {
       if (user) {
         token.name = user.name;
         token.email = user.email;
-        token.picture = user.image;
       }
       return token;
     },
-
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.name = token.name as string;
-        session.user.email = token.email as string;
-        session.user.image = token.picture as string;
-      }
+      session.user.name = token.name;
+      session.user.email = token.email;
       return session;
     },
   },

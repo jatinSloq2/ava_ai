@@ -12,7 +12,7 @@ export default async function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 px-4">
       <div className="w-full max-w-md p-6 bg-white rounded-2xl shadow-xl">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login to ResuAI</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">Login to AVA.ai</h1>
         <LoginForm />
       </div>
     </div>
