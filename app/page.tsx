@@ -1,13 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardTitle,
 } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function Home() {
   return (
