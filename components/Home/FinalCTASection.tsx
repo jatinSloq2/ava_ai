@@ -10,22 +10,24 @@ export default function FinalCTASection() {
   useEffect(() => {
     gsap.fromTo(
       ctaRef.current,
-      { opacity: 0, scale: 0.95 },
-      { opacity: 1, scale: 1, duration: 0.6 }
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
     );
   }, []);
 
   return (
-    <section className="bg-muted border-t border-border text-center py-20 px-4 sm:px-6 lg:px-8">
-      <div ref={ctaRef} className="max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4">
-          Ready to Build a Resume That Works?
+    <section className="bg-background border-t border-border py-24 px-4 sm:px-6 lg:px-8">
+      <div
+        ref={ctaRef}
+        className="max-w-3xl mx-auto text-center flex flex-col items-center gap-6"
+      >
+        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+          Ready to Build a Resume That Wins?
         </h2>
-        <p className="text-muted-foreground mb-8">
-          Start building or upload your resume for an instant review. It’s fast,
-          accurate, and completely free.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
+          Whether you're just starting or need a revamp, AVA.ai gives you the tools to craft a standout resume that gets noticed.
         </p>
-        <Button size="lg" className="text-lg">
+        <Button size="lg" className="text-lg px-8 py-6 w-fit rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
           Get Started Now — It’s Free
         </Button>
       </div>
